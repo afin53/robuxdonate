@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Live Logs</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body class="bg-[#0b0c10] text-gray-100 min-h-screen p-4 md:p-8">
+
+    <div class="max-w-5xl mx-auto space-y-6">
+        
+        <div class="flex flex-col sm:flex-row justify-between items-center bg-[#1f2833] border border-cyan-900/30 p-6 rounded-2xl shadow-xl gap-4">
+            <div>
+                <h1 class="text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">ROBUX DATABASE SYSTEM</h1>
+                <p class="text-xs text-gray-400 mt-1">Універсальний LIVE-автономний режим</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="relative flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+                </span>
+                <span id="sync-status" class="text-sm font-bold text-cyan-400">Синхронізація...</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <div class="bg-[#151a21] border border-gray-800 rounded-2xl p-5 shadow-lg h-fit space-y-4">
+                <h2 class="text-lg font-bold text-amber-400 flex items-center gap-2">👑 Рейтинг Мажорів</h2>
+                <div id="leaderboard" class="space-y-2">
+                    <p class="text-xs text-gray-500 text-center py-4">Очікування даних...</p>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 bg-[#151a21] border border-gray-800 rounded-2xl p-5 shadow-lg space-y-4">
+                <h2 class="text-lg font-bold text-gray-300">📜 Останні транзакції</h2>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-gray-800 text-gray-400 text-xs uppercase font-semibold">
+                                <th class="pb-3 pl-2">Час</th>
+                                <th class="pb-3">Баланс</th>
+                                <th class="pb-3">Кому</th>
+                                <th class="pb-3 text-right pr-2">Сума</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-table-body" class="text-sm">
+                            <tr>
+                                <td colspan="4" class="text-center py-10 text-gray-500">Завантаження...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const SHEET_ID = "1VYIO6B-9ZQdv4hA95ZrfozsHtbpwcqDfkkIDLFw2Fek";
+        // Прямий експорт першої вкладки (незалежно від її назви)
+        const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
+
+        async function fetchTableData() {
+            try {
+                const response = await fetch(CSV_URL);
+                if (!response.ok) throw new Error(`Статус помилки: ${response.status}`);
+                
+                const csvText = await response.text();
+                
+                // Перевірка чи Google не повернув сторінку входу замість CSV
+                if (csvText.includes("<!DOCTYPE html") || csvText.includes("login")) {
+                    throw new Error("Таблиця приватна! Відкрий доступ (Усі, хто мають посилання)");
+                }
+
+                const lines = csvText.split('\n').map(line => {
+                    return line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                });
+                
+                const rows = lines.slice(1).filter(row => row.length >= 4 && row[0].trim() !== "");
+                rows.reverse();
+
+                renderLogs(rows);
+                calculateLeaderboard(rows);
+                
+                document.getElementById('sync-status').innerText = "LIVE дані оновлено";
+                document.getElementById('sync-status').className = "text-sm font-bold text-green-400";
+            } catch (error) {
+                console.error(error);
+                document.getElementById('sync-status').innerText = `⚠️ Помилка: ${error.message}`;
+                document.getElementById('sync-status').className = "text-sm font-bold text-red-500 font-mono text-xs";
+            }
+        }
+
+        function renderLogs(rows) {
+            const tbody = document.getElementById('logs-table-body');
+            if (rows.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-10 text-gray-500">Немає записів.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = "";
+            rows.forEach(row => {
+                const timestamp = row[0] ? row[0].replace(/"/g, '') : '-';
+                const balance = row[1] ? row[1].replace(/"/g, '') : '0';
+                const friend = row[2] ? row[2].replace(/"/g, '') : 'Невідомо';
+                const amount = row[3] ? row[3].replace(/"/g, '') : '0';
+
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-gray-800/40 hover:bg-gray-800/20 transition-colors fade-in";
+                tr.innerHTML = `
+                    <td class="py-3.5 pl-2 text-xs text-gray-500">${timestamp}</td>
+                    <td class="py-3.5 font-mono text-gray-400">⏣ ${balance}</td>
+                    <td class="py-3.5 font-bold text-purple-400">${friend}</td>
+                    <td class="py-3.5 text-right pr-2 font-black text-green-400">+${amount.trim()} R$</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function calculateLeaderboard(rows) {
+            const totals = { "Андрій": 0, "Артем": 0, "Матвій": 0 };
+
+            rows.forEach(row => {
+                if(!row[2] || !row[3]) return;
+                const friend = row[2].replace(/"/g, '').trim();
+                const amount = Number(row[3].replace(/"/g, '').trim());
+                if (totals.hasOwnProperty(friend)) {
+                    totals[friend] += amount;
+                }
+            });
+
+            const sorted = Object.entries(totals).sort((a, b) => b[1] - a[1]);
+            const leaderboardContainer = document.getElementById('leaderboard');
+            leaderboardContainer.innerHTML = "";
+            const places = ["🥇", "🥈", "🥉"];
+
+            sorted.forEach(([name, sum], index) => {
+                const item = document.createElement('div');
+                item.className = "flex justify-between items-center bg-[#1b222c] p-3 rounded-xl border border-gray-800/60";
+                item.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="text-lg">${places[index]}</span>
+                        <span class="font-bold text-sm">${name}</span>
+                    </div>
+                    <span class="text-xs bg-amber-950 text-amber-400 font-extrabold px-2.5 py-1 rounded-lg">${sum} R$</span>
+                `;
+                leaderboardContainer.appendChild(item);
+            });
+        }
+
+        fetchTableData();
+        setInterval(fetchTableData, 5000);
+    </script>
+</body>
+</html>

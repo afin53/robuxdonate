@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robux Transfer System</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Анімація тряски для помилок */
+        .shake { animation: shake 0.3s ease-in-out; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+    </style>
+</head>
+<body class="bg-[#0f111a] text-gray-100 min-h-screen flex items-center justify-center p-4 selection:bg-purple-500 selection:text-white">
+
+    <div id="main-card" class="w-full max-w-md bg-[#161925] border border-purple-900/40 rounded-3xl p-6 shadow-2xl relative overflow-hidden transition-all duration-300">
+        <div class="absolute -top-20 -left-20 w-40 h-40 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-20 -right-20 w-40 h-40 bg-pink-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="flex justify-center items-center mb-6 pb-4 border-b border-gray-800">
+            <h1 class="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">R$ Transfer System</h1>
+        </div>
+
+        <div id="step-1" class="space-y-5 fade-in">
+            <div class="text-center">
+                <p class="text-gray-400 text-sm">Крок 1 із 2</p>
+                <h2 class="text-2xl font-extrabold mt-1">Скільки Robux у тебе є?</h2>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-2.5 max-h-[220px] overflow-y-auto pr-1 border border-gray-800/50 p-2 rounded-2xl bg-[#0d0f17]">
+                <script>
+                    const balances = [50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
+                    balances.forEach(val => {
+                        document.write(`
+                            <button onclick="selectBalance(${val})" id="bal-${val}" class="balance-btn bg-[#1b1f32] hover:border-purple-500 border border-transparent py-3 rounded-xl font-bold text-center transition-all cursor-pointer hover:scale-105 active:scale-95 duration-200">
+                                <span class="text-amber-400">⏣</span> ${val}
+                            </button>
+                        `);
+                    });
+                </script>
+            </div>
+            <button onclick="nextStep()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 py-4 rounded-xl font-bold shadow-lg shadow-purple-950/50 transition-all cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0">Далі ➔</button>
+        </div>
+
+        <div id="step-2" class="space-y-5 hidden fade-in">
+            <div class="text-center">
+                <button onclick="prevStep()" class="text-xs text-gray-400 hover:text-white mb-1 transition-colors">← Назад</button>
+                <div class="flex justify-between items-center px-2 bg-purple-950/40 border border-purple-800/30 rounded-xl py-1.5 mb-2">
+                    <span class="text-xs text-gray-300">Твій баланс:</span>
+                    <span class="text-sm font-bold text-amber-400">⏣ <span id="display-balance">0</span></span>
+                </div>
+                <h2 class="text-2xl font-extrabold mt-1">Деталі донату</h2>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Обери отримувача:</label>
+                <div class="grid grid-cols-3 gap-3">
+                    <div onclick="selectFriend('Андрій')" id="friend-Андрій" class="friend-card bg-[#1b1f32] border border-transparent rounded-2xl p-3 text-center cursor-pointer transition-all hover:scale-105 duration-200"><img src="and.png" class="w-14 h-14 rounded-full mx-auto mb-2 object-cover" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Andriy'"><p class="text-sm font-semibold truncate">Андрій</p></div>
+                    <div onclick="selectFriend('Артем')" id="friend-Артем" class="friend-card bg-[#1b1f32] border border-transparent rounded-2xl p-3 text-center cursor-pointer transition-all hover:scale-105 duration-200"><img src="art.png" class="w-14 h-14 rounded-full mx-auto mb-2 object-cover" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Artem'"><p class="text-sm font-semibold truncate">Артем</p></div>
+                    <div onclick="selectFriend('Матвій')" id="friend-Матвій" class="friend-card bg-[#1b1f32] border border-transparent rounded-2xl p-3 text-center cursor-pointer transition-all hover:scale-105 duration-200"><img src="mat.png" class="w-14 h-14 rounded-full mx-auto mb-2 object-cover" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Matvii'"><p class="text-sm font-semibold truncate">Матвій</p></div>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Скільки Robux задонатиш?</label>
+                <div class="relative">
+                    <span class="absolute left-4 top-3.5 text-amber-400 font-bold">⏣</span>
+                    <input type="number" id="donate-amount" oninput="checkAmount()" placeholder="Введіть суму..." class="w-full bg-[#0d0f17] border border-gray-800 rounded-xl py-3.5 pl-10 pr-4 text-white placeholder-gray-500 font-bold focus:outline-none focus:border-purple-500 transition-all">
+                </div>
+                <p id="bomzh-error" class="text-red-500 text-sm font-bold text-center hidden animate-bounce">Ех ти бомж 💀</p>
+                <p id="min-error" class="text-amber-500 text-sm font-bold text-center hidden">Мінімальна сума донату — 10 R$ ⚠️</p>
+            </div>
+
+            <button onclick="submitDonation()" id="submit-btn" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 py-4 rounded-xl font-bold shadow-lg shadow-green-950/50 transition-all cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0 duration-200">Підтвердити донат 💸</button>
+        </div>
+    </div>
+
+    <script>
+        const GOOGLE_FORM_URL = "https://docs.google.com/forms/u/0/d/1B-T49pbBCtNQ2SqmGmANRj5zGUhVFvHEKzRyn8cU1Bs/formResponse";
+        const ENTRY_ID_BALANCE = "entry.250677806"; 
+        const ENTRY_ID_FRIEND  = "entry.346970547"; 
+        const ENTRY_ID_AMOUNT  = "entry.352452771"; 
+
+        let userBalance = 0;
+        let selectedFriend = "";
+
+        function selectBalance(value) {
+            document.querySelectorAll('.balance-btn').forEach(b => b.classList.remove('border-purple-500', 'bg-purple-950/30', 'scale-105'));
+            document.getElementById(`bal-${value}`).classList.add('border-purple-500', 'bg-purple-950/30', 'scale-105');
+            userBalance = value;
+        }
+
+        function selectFriend(name) {
+            document.querySelectorAll('.friend-card').forEach(c => c.classList.remove('border-purple-500', 'bg-purple-950/30', 'scale-105'));
+            document.getElementById(`friend-${name}`).classList.add('border-purple-500', 'bg-purple-950/30', 'scale-105');
+            selectedFriend = name;
+        }
+
+        function nextStep() {
+            if (!userBalance) return alert("Будь ласка, обери свій поточний баланс!");
+            document.getElementById('display-balance').innerText = userBalance;
+            document.getElementById('step-1').classList.add('hidden');
+            document.getElementById('step-2').classList.remove('hidden');
+            checkAmount();
+        }
+
+        function prevStep() {
+            document.getElementById('step-2').classList.add('hidden');
+            document.getElementById('step-1').classList.remove('hidden');
+        }
+
+        function checkAmount() {
+            const amount = Number(document.getElementById('donate-amount').value);
+            const bomzhError = document.getElementById('bomzh-error');
+            const minError = document.getElementById('min-error');
+            const submitBtn = document.getElementById('submit-btn');
+
+            bomzhError.classList.add('hidden');
+            minError.classList.add('hidden');
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = "1";
+
+            if (amount > userBalance) {
+                bomzhError.classList.remove('hidden');
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = "0.5";
+            } else if (amount > 0 && amount < 10) {
+                minError.classList.remove('hidden');
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = "0.5";
+            }
+        }
+
+        function triggerShake() {
+            const card = document.getElementById('main-card');
+            card.classList.add('shake');
+            setTimeout(() => card.classList.remove('shake'), 300);
+        }
+
+        function submitDonation() {
+            const amountInput = document.getElementById('donate-amount');
+            const amount = Number(amountInput.value);
+
+            if (!selectedFriend) return alert("Обери друга для донату!");
+            if (amount < 10) {
+                triggerShake();
+                return;
+            }
+
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.innerText = "Обробка...";
+
+            const formData = new FormData();
+            formData.append(ENTRY_ID_BALANCE, userBalance);
+            formData.append(ENTRY_ID_FRIEND, selectedFriend);
+            formData.append(ENTRY_ID_AMOUNT, amount);
+
+            fetch(GOOGLE_FORM_URL, { method: 'POST', mode: 'no-cors', body: formData }).then(() => {
+                userBalance -= amount;
+                document.getElementById('display-balance').innerText = userBalance;
+                alert(`Успішно! Надіслано ${amount} R$ для ${selectedFriend}! ✨`);
+                
+                amountInput.value = "";
+                document.querySelectorAll('.friend-card').forEach(c => c.classList.remove('border-purple-500', 'bg-purple-950/30', 'scale-105'));
+                selectedFriend = "";
+                btn.disabled = false;
+                btn.innerText = "Підтвердити донат 💸";
+
+                if (userBalance < 10) {
+                    alert("Баланс замалий для нових донатів (мінімум 10)!");
+                    prevStep();
+                }
+            }).catch(() => {
+                alert("Помилка відправки.");
+                btn.disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
