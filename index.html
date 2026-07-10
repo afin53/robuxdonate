@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Robux Transfer System - MEGA EDITION</title>
+    <title>Robux Transfer System - ULTRA HYPEX</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
@@ -12,7 +12,6 @@
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Потужна тряска для помилок */
         .shake { animation: shake 0.3s ease-in-out; }
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
@@ -20,21 +19,19 @@
             40%, 80% { transform: translateX(8px); }
         }
 
-        /* МЕГА ЗЕМЛЕТРУС ДЛЯ ДОНАТУ */
-        .mega-earthquake { animation: earthquake 0.5s ease-in-out infinite; }
+        /* ДОВГИЙ МЕГА ЗЕМЛЕТРУС НА 5 СЕКУНД */
+        .mega-earthquake { animation: earthquake 0.3s ease-in-out infinite; }
         @keyframes earthquake {
             0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            10% { transform: translate(-4px, -2px) rotate(-1deg); }
-            30% { transform: translate(3px, 4px) rotate(1deg); }
-            50% { transform: translate(-3px, 2px) rotate(-1deg); }
-            70% { transform: translate(4px, -3px) rotate(1deg); }
-            90% { transform: translate(-2px, 4px) rotate(0deg); }
+            10% { transform: translate(-3px, -2px) rotate(-0.5deg); }
+            30% { transform: translate(2px, 3px) rotate(0.5deg); }
+            50% { transform: translate(-2px, 1px) rotate(-0.5deg); }
+            70% { transform: translate(3px, -2px) rotate(0.5deg); }
+            90% { transform: translate(-1px, 2px) rotate(0deg); }
         }
 
-        /* Райдужна VIP рамка (RGB підсвітка) */
-        .rgb-glow {
-            position: relative;
-        }
+        /* РАЙДУЖНА VIP RGB ПІДСВІТКА */
+        .rgb-glow { position: relative; }
         .rgb-glow::after {
             content: '';
             position: absolute;
@@ -52,7 +49,7 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Анімація для падаючих робуксів */
+        /* ПАДАЮЧІ РОБУКСИ */
         .falling-robux {
             position: fixed;
             top: -50px;
@@ -60,29 +57,25 @@
             z-index: 100;
             font-weight: bold;
             color: #fbbf24;
-            text-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.7);
             animation: fall linear forwards;
         }
-        @keyframes fall {
-            to {
-                transform: translateY(110vh) rotate(360deg);
-            }
-        }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
     </style>
 </head>
-<body class="bg-[#0f111a] text-gray-100 min-h-screen flex items-center justify-center p-4 selection:bg-purple-500 selection:text-white transition-colors duration-200">
+<body class="bg-[#0f111a] text-gray-100 min-h-screen flex items-center justify-center p-4 transition-colors duration-300">
 
     <div id="main-card" class="w-full max-w-md bg-[#161925] border border-purple-900/40 rounded-3xl p-6 shadow-2xl relative transition-all duration-300">
         <div class="absolute -top-20 -left-20 w-40 h-40 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -bottom-20 -right-20 w-40 h-40 bg-pink-600/20 rounded-full blur-3xl pointer-events-none"></div>
 
         <div class="flex justify-center items-center mb-6 pb-4 border-b border-gray-800">
-            <h1 class="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">⏣ R$ Transfer System</h1>
+            <h1 class="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">⏟ R$ Transfer System</h1>
         </div>
 
         <div id="step-1" class="space-y-5 fade-in">
             <div class="text-center">
-                <p class="text-gray-400 text-sm">Крок 1 із 2</p>
+                <p class="text-gray-400 text-sm">Крок 1 із 4</p>
                 <h2 class="text-2xl font-extrabold mt-1">Скільки Robux у тебе є?</h2>
             </div>
             
@@ -91,22 +84,22 @@
                     const balances = [50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
                     balances.forEach(val => {
                         document.write(`
-                            <button onclick="selectBalance(${val})" id="bal-${val}" class="balance-btn bg-[#1b1f32] hover:border-purple-500 border border-transparent py-3 rounded-xl font-bold text-center transition-all cursor-pointer hover:scale-105 active:scale-95 duration-200">
+                            <button onclick="selectBalance(${val})" id="bal-${val}" class="balance-btn bg-[#1b1f32] hover:border-purple-500 border border-transparent py-3 rounded-xl font-bold text-center transition-all cursor-pointer hover:scale-105 duration-200">
                                 <span class="text-amber-400">⏣</span> ${val}
                             </button>
                         `);
                     });
                 </script>
             </div>
-            <button onclick="nextStep()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 py-4 rounded-xl font-bold shadow-lg shadow-purple-950/50 transition-all cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0">Далі ➔</button>
+            <button onclick="changeStep(1, 2)" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 py-4 rounded-xl font-bold shadow-lg shadow-purple-950/50 cursor-pointer transition-all">Далі ➔</button>
         </div>
 
         <div id="step-2" class="space-y-5 hidden fade-in">
             <div class="text-center">
-                <button onclick="prevStep()" class="text-xs text-gray-400 hover:text-white mb-1 transition-colors">← Назад</button>
+                <button onclick="changeStep(2, 1)" class="text-xs text-gray-400 hover:text-white mb-1">← Назад</button>
                 <div class="flex justify-between items-center px-2 bg-purple-950/40 border border-purple-800/30 rounded-xl py-1.5 mb-2">
                     <span class="text-xs text-gray-300">Твій баланс:</span>
-                    <span class="text-sm font-bold text-amber-400">⏣ <span id="display-balance">0</span></span>
+                    <span class="text-sm font-bold text-amber-400">⏣ <span class="display-balance">0</span></span>
                 </div>
                 <h2 class="text-2xl font-extrabold mt-1">Деталі донату</h2>
             </div>
@@ -124,14 +117,54 @@
                 <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Скільки Robux задонатиш?</label>
                 <div class="relative">
                     <span class="absolute left-4 top-3.5 text-amber-400 font-bold">⏣</span>
-                    <input type="number" id="donate-amount" oninput="checkAmount()" placeholder="Введіть суму..." class="w-full bg-[#0d0f17] border border-gray-800 rounded-xl py-3.5 pl-10 pr-4 text-white placeholder-gray-500 font-bold focus:outline-none focus:border-purple-500 transition-all">
+                    <input type="number" id="donate-amount" oninput="checkAmount()" placeholder="Введіть суму..." class="w-full bg-[#0d0f17] border border-gray-800 rounded-xl py-3.5 pl-10 pr-4 text-white font-bold focus:outline-none focus:border-purple-500">
                 </div>
                 <p id="bomzh-error" class="text-red-500 text-sm font-bold text-center hidden animate-bounce">Ех ти бомж 💀</p>
                 <p id="min-error" class="text-amber-500 text-sm font-bold text-center hidden">Мінімальна сума донату — 10 R$ ⚠️</p>
             </div>
 
-            <button onclick="submitDonation()" id="submit-btn" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 py-4 rounded-xl font-bold shadow-lg shadow-green-950/50 transition-all cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0 duration-200">Підтвердити донат 💸</button>
+            <button onclick="submitDonation()" id="submit-btn" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 py-4 rounded-xl font-bold shadow-lg cursor-pointer transition-all">Підтвердити донат 💸</button>
         </div>
+
+        <div id="step-3" class="space-y-5 hidden fade-in">
+            <div class="text-center">
+                <p class="text-gray-400 text-sm">Крок 3 із 4</p>
+                <h2 class="text-xl font-extrabold mt-1 text-purple-400">🔥 МЕГА ДОНАТ ЗАРАХОВАНО!</h2>
+                <p class="text-gray-300 text-sm mt-2">Скільки Robux задонатиш собі в наступний раз?</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="selectNextPlan('500')" id="plan-500" class="plan-btn bg-[#1b1f32] border border-transparent py-4 rounded-2xl font-black text-amber-400 hover:scale-105 duration-200 cursor-pointer">⏣ 500</button>
+                <button onclick="selectNextPlan('1K')" id="plan-1K" class="plan-btn bg-[#1b1f32] border border-transparent py-4 rounded-2xl font-black text-amber-400 hover:scale-105 duration-200 cursor-pointer">⏣ 1K</button>
+                <button onclick="selectNextPlan('10K')" id="plan-10K" class="plan-btn bg-[#1b1f32] border border-transparent py-4 rounded-2xl font-black text-amber-400 hover:scale-105 duration-200 cursor-pointer">⏣ 10K</button>
+                <button onclick="selectNextPlan('100K')" id="plan-100K" class="plan-btn bg-[#1b1f32] border border-transparent py-4 rounded-2xl font-black text-amber-400 hover:scale-105 duration-200 cursor-pointer">⏣ 100K</button>
+            </div>
+
+            <button onclick="goToStep4()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 py-4 rounded-xl font-bold cursor-pointer transition-all">Далі ➔</button>
+        </div>
+
+        <div id="step-4" class="space-y-5 hidden fade-in">
+            <div class="text-center">
+                <p class="text-gray-400 text-sm">Крок 4 із 4</p>
+                <h2 class="text-2xl font-extrabold mt-1">Донат по @username</h2>
+                <p class="text-xs text-gray-400 mt-1">Введи нікнейм у Роблоксі, щоб підтягнути скін</p>
+            </div>
+
+            <div class="space-y-3">
+                <div class="relative">
+                    <span class="absolute left-4 top-3.5 text-gray-500 font-bold">@</span>
+                    <input type="text" id="roblox-username" oninput="fetchRobloxAvatar()" placeholder="Введи нікнейм..." class="w-full bg-[#0d0f17] border border-gray-800 rounded-xl py-3.5 pl-10 pr-4 text-white font-bold focus:outline-none focus:border-cyan-500">
+                </div>
+
+                <div id="avatar-container" class="bg-[#0d0f17] border border-gray-800/80 rounded-2xl p-4 text-center hidden">
+                    <img id="roblox-avatar-img" src="" class="w-28 h-28 mx-auto rounded-2xl border-2 border-purple-500 shadow-lg shadow-purple-950/30 object-cover mb-2 animate-pulse">
+                    <p id="roblox-avatar-name" class="text-sm font-black text-cyan-400"></p>
+                </div>
+            </div>
+
+            <button onclick="finalTargetDonate()" id="final-btn" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 py-4 rounded-xl font-bold shadow-lg cursor-pointer transition-all">Задонатити гравцю ⚡</button>
+        </div>
+
     </div>
 
     <script>
@@ -142,6 +175,8 @@
 
         let userBalance = 0;
         let selectedFriend = "";
+        let nextPlanValue = "";
+        let robloxUserId = "";
 
         function selectBalance(value) {
             document.querySelectorAll('.balance-btn').forEach(b => b.classList.remove('border-purple-500', 'bg-purple-950/30', 'scale-105'));
@@ -155,17 +190,19 @@
             selectedFriend = name;
         }
 
-        function nextStep() {
-            if (!userBalance) return alert("Будь ласка, обери свій поточний баланс!");
-            document.getElementById('display-balance').innerText = userBalance;
-            document.getElementById('step-1').classList.add('hidden');
-            document.getElementById('step-2').classList.remove('hidden');
-            checkAmount();
+        function selectNextPlan(val) {
+            document.querySelectorAll('.plan-btn').forEach(b => b.classList.remove('border-pink-500', 'bg-pink-950/20'));
+            document.getElementById(`plan-${val}`).classList.add('border-pink-500', 'bg-pink-950/20');
+            nextPlanValue = val;
         }
 
-        function prevStep() {
-            document.getElementById('step-2').classList.add('hidden');
-            document.getElementById('step-1').classList.remove('hidden');
+        function changeStep(from, to) {
+            if (from === 1 && to === 2 && !userBalance) return alert("Будь ласка, обери свій поточний баланс!");
+            
+            document.querySelectorAll('.display-balance').forEach(el => el.innerText = userBalance);
+            document.getElementById(`step-${from}`).classList.add('hidden');
+            document.getElementById(`step-${to}`).classList.remove('hidden');
+            if (to === 2) checkAmount();
         }
 
         function checkAmount() {
@@ -190,62 +227,94 @@
             }
         }
 
-        function triggerErrorShake() {
-            const card = document.getElementById('main-card');
-            card.classList.add('shake');
-            setTimeout(() => card.classList.remove('shake'), 300);
+        // Пряме витягування скіна з офіційного проксі Roblox API!
+        async function fetchRobloxAvatar() {
+            const username = document.getElementById('roblox-username').value.trim();
+            const container = document.getElementById('avatar-container');
+            const img = document.getElementById('roblox-avatar-img');
+            const nameTxt = document.getElementById('roblox-avatar-name');
+
+            if (username.length < 3) {
+                container.classList.add('hidden');
+                return;
+            }
+
+            try {
+                // Крок A: Отримуємо ID користувача за його нікнеймом
+                const userRes = await fetch(`https://users.roblox.com/v1/users/search?keyword=${username}&limit=1`);
+                const userData = await userRes.json();
+
+                if (userData.data && userData.data.length > 0) {
+                    robloxUserId = userData.data[0].id;
+                    const displayName = userData.data[0].displayName;
+
+                    // Крок B: Запитуємо офіційний Headshot скін за ID
+                    const thumbRes = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${robloxUserId}&size=150x150&format=Png&isCircular=false`);
+                    const thumbData = await thumbRes.json();
+
+                    if (thumbData.data && thumbData.data.length > 0) {
+                        img.src = thumbData.data[0].imageUrl;
+                        img.classList.remove('animate-pulse');
+                        nameTxt.innerText = `${displayName} (@${username})`;
+                        container.classList.remove('hidden');
+                    }
+                } else {
+                    container.classList.add('hidden');
+                }
+            } catch (err) {
+                // Якщо блокує CORS локально — використовуємо твій залізобетонний приклад посилання
+                img.src = `https://tr.rbxcdn.com/30DAY-AvatarHeadshot-E4E3192A4376226BFD0D0A3B87DFBCCB-Png/150/150/AvatarHeadshot/Webp/noFilter`;
+                img.classList.remove('animate-pulse');
+                nameTxt.innerText = `@${username}`;
+                container.classList.remove('hidden');
+            }
         }
 
-        // === МЕГА ЕФЕКТИ ПРИ ДОНАТІ ===
         function startMegaEffects(amount) {
             const card = document.getElementById('main-card');
             
-            // 1. Спалах екрана (Фіолетово-золотий вибух)
-            document.body.classList.add(amount >= 100 ? 'bg-amber-500' : 'bg-purple-600');
-            setTimeout(() => {
-                document.body.classList.remove('bg-amber-500', 'bg-purple-600');
-            }, 150);
+            // 1. Постійні спалахи екрана кожні 800мс протягом 5 секунд
+            let flashInterval = setInterval(() => {
+                document.body.classList.add(amount >= 100 ? 'bg-amber-500' : 'bg-purple-600');
+                setTimeout(() => document.body.classList.remove('bg-amber-500', 'bg-purple-600'), 150);
+            }, 800);
+            setTimeout(() => clearInterval(flashInterval), 5000);
 
-            // 2. Землетрус сайту
+            // 2. Мега Землетрус рівно на 5000 мс (5 секунд)!
             card.classList.add('mega-earthquake');
-            setTimeout(() => card.classList.remove('mega-earthquake'), 600);
+            setTimeout(() => card.classList.remove('mega-earthquake'), 5000);
 
-            // 3. VIP RGB підсвітка (якщо задонатив більше 100 робуксів)
-            if (amount >= 100) {
-                card.classList.add('rgb-glow');
-                // Залишаємо RGB на 5 секунд, потім плавно прибираємо
-                setTimeout(() => card.classList.remove('rgb-glow'), 5000);
-            }
+            // 3. RGB Рамка на картці на 5 секунд
+            card.classList.add('rgb-glow');
+            setTimeout(() => card.classList.remove('rgb-glow'), 5000);
 
-            // 4. Летючі цифри донату вверх
+            // 4. Текст суми, що вилітає і росте у розмірах
             const text = document.createElement('div');
             text.innerText = `+${amount} R$`;
-            text.className = "absolute text-4xl font-black text-amber-400 pointer-events-none transition-all duration-1000 ease-out z-50 transform opacity-100 drop-shadow-[0_0_15px_rgba(251,191,36,0.8)]";
-            text.style.left = `${card.offsetWidth / 2 - 50}px`;
+            text.className = "absolute text-5xl font-black text-amber-400 pointer-events-none transition-all duration-[4000ms] ease-out z-50 transform opacity-100 drop-shadow-[0_0_20px_rgba(251,191,36,0.9)]";
+            text.style.left = `${card.offsetWidth / 2 - 60}px`;
             text.style.top = `${card.offsetHeight / 2 - 20}px`;
             card.appendChild(text);
 
             setTimeout(() => {
-                text.style.transform = "translateY(-200px) scale(1.8)";
+                text.style.transform = "translateY(-280px) scale(2.2)";
                 text.style.opacity = "0";
             }, 50);
-            setTimeout(() => text.remove(), 1050);
+            setTimeout(() => text.remove(), 4100);
 
-            // 5. Золотий дощ з значків робуксів ⏣
-            const particleCount = amount >= 100 ? 50 : 20; // більше донат — більше монет
-            for (let i = 0; i < particleCount; i++) {
-                setTimeout(() => {
-                    const coin = document.createElement('div');
-                    coin.className = "falling-robux";
-                    coin.innerText = "⏣";
-                    coin.style.left = Math.random() * 100 + "vw";
-                    coin.style.fontSize = Math.random() * 20 + 15 + "px";
-                    coin.style.animationDuration = Math.random() * 1.5 + 1 + "s"; // швидкість падіння
-                    document.body.appendChild(coin);
-                    
-                    setTimeout(() => coin.remove(), 2500);
-                }, i * 20); // мікрозатримка появи кожної монетки
-            }
+            // 5. Божевільний нескінченний дощ з робуксів ⏣ протягом 5 секунд
+            let coinInterval = setInterval(() => {
+                const coin = document.createElement('div');
+                coin.className = "falling-robux";
+                coin.innerText = "⏣";
+                coin.style.left = Math.random() * 100 + "vw";
+                coin.style.fontSize = Math.random() * 25 + 15 + "px";
+                coin.style.animationDuration = Math.random() * 1.2 + 0.8 + "s";
+                document.body.appendChild(coin);
+                setTimeout(() => coin.remove(), 2000);
+            }, 60); // кожні 60 мілісекунд падає нова монета!
+            
+            setTimeout(() => clearInterval(coinInterval), 5000);
         }
 
         function submitDonation() {
@@ -253,10 +322,7 @@
             const amount = Number(amountInput.value);
 
             if (!selectedFriend) return alert("Обери друга для донату!");
-            if (amount < 10) {
-                triggerErrorShake();
-                return;
-            }
+            if (amount < 10) return;
 
             const btn = document.getElementById('submit-btn');
             btn.disabled = true;
@@ -268,28 +334,44 @@
             formData.append(ENTRY_ID_AMOUNT, amount);
 
             fetch(GOOGLE_FORM_URL, { method: 'POST', mode: 'no-cors', body: formData }).then(() => {
-                // Запуск всієї краси!
                 startMegaEffects(amount);
-
                 userBalance -= amount;
-                document.getElementById('display-balance').innerText = userBalance;
-                
-                amountInput.value = "";
-                document.querySelectorAll('.friend-card').forEach(c => c.classList.remove('border-purple-500', 'bg-purple-950/30', 'scale-105'));
-                selectedFriend = "";
-                btn.disabled = false;
-                btn.innerText = "Підтвердити донат 💸";
 
-                if (userBalance < 10) {
-                    setTimeout(() => {
-                        alert("Твій баланс вичерпано (менше 10 R$). Повертаємо на крок 1!");
-                        prevStep();
-                    }, 1200); // даємо ефектам закінчитися перед редиректом
-                }
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerText = "Підтвердити донат 💸";
+                    changeStep(2, 3); // Переходимо на новий етап 3 після завершення хайпу
+                }, 5000); // чекаємо рівно 5 секунд поки триває ефект багатства!
             }).catch(() => {
-                alert("Помилка мережі при відправці.");
+                alert("Помилка мережі.");
                 btn.disabled = false;
-                btn.innerText = "Підтвердити донат 💸";
+            });
+        }
+
+        function goToStep4() {
+            if (!nextPlanValue) return alert("Обери суму плану на наступний раз!");
+            changeStep(3, 4);
+        }
+
+        function finalTargetDonate() {
+            const username = document.getElementById('roblox-username').value.trim();
+            if(!username) return alert("Введи нікнейм гравця!");
+            
+            const btn = document.getElementById('final-btn');
+            btn.innerText = "🚀 ВІДПРАВЛЕНО В ROBLOX!";
+            btn.disabled = true;
+
+            // Відправляємо плани та кастомний нікнейм у таблицю
+            const formData = new FormData();
+            formData.append(ENTRY_ID_BALANCE, `План: ${nextPlanValue} R$`);
+            formData.append(ENTRY_ID_FRIEND, `@Username: ${username}`);
+            formData.append(ENTRY_ID_AMOUNT, 0);
+
+            fetch(GOOGLE_FORM_URL, { method: 'POST', mode: 'no-cors', body: formData }).then(() => {
+                setTimeout(() => {
+                    alert(`Успішно задоначено користувачу @${username}! Повертаємо на початок.`);
+                    location.reload();
+                }, 1000);
             });
         }
     </script>
